@@ -4,6 +4,7 @@ import tkinter.messagebox as messagebox
 from utils import centrar_ventana
 import re
 import random
+from tkcalendar import DateEntry
 
 # Base simulada de usuarios existentes
 usuarios_existentes = ["Ejuan123", "Eana456", "Epedro789"]
@@ -51,9 +52,9 @@ def validar_campos_registro(nombre, apellido, cedula, fecha_nacimiento, contrase
         messagebox.showerror("Error", "El correo es obligatorio y debe tener un formato válido (ejemplo: usuario@dominio.com).")
         return False, None, None
 
-    # Contraseña: mínimo 8 caracteres, al menos una minúscula, una mayúscula, un número y un caracter especial
-    if len(contrasena) < 8:
-        messagebox.showerror("Error", "La contraseña es obligatoria y debe tener al menos 8 caracteres.")
+    # Contraseña: mínimo 5 caracteres, al menos una minúscula, una mayúscula y un número
+    if len(contrasena) < 5:
+        messagebox.showerror("Error", "La contraseña es obligatoria y debe tener al menos 5 caracteres.")
         return False, None, None
     if not re.search(r"[a-z]", contrasena):
         messagebox.showerror("Error", "La contraseña debe contener al menos una letra minúscula.")
@@ -63,9 +64,6 @@ def validar_campos_registro(nombre, apellido, cedula, fecha_nacimiento, contrase
         return False, None, None
     if not re.search(r"\d", contrasena):
         messagebox.showerror("Error", "La contraseña debe contener al menos un número.")
-        return False, None, None
-    if not re.search(r"[!@#$%^&*(),.?\":{}|<>]", contrasena):
-        messagebox.showerror("Error", "La contraseña debe contener al menos un caracter especial.")
         return False, None, None
 
     return True, nombre, apellido
@@ -83,6 +81,9 @@ class VentanaRegistro:
         self.ventana.focus_force()
         self.ventana.grab_set()
 
+        label_font = ("Segoe UI", 14)
+        entry_font = ("Segoe UI", 13)
+
         # Título principal
         self.label = tk.Label(
             self.ventana,
@@ -93,60 +94,63 @@ class VentanaRegistro:
         )
         self.label.place(relx=0.5, y=80, anchor=tk.CENTER)
 
-        # Subtítulo
-        self.label2 = tk.Label(
-            self.ventana,
-            text="Completa tus datos:",
-            bg="#f0f2f5",
-            fg="#050505",
-            font=("Segoe UI", 16)
-        )
-        self.label2.place(relx=0.5, y=130, anchor=tk.CENTER)
+        # Alineación y ancho uniforme
+        x_label = 250
+        x_entry = 450
+        y_start = 160
+        y_step = 50
+        entry_width = 270  # Ancho uniforme para todos los campos
 
-        entry_font = ("Segoe UI", 14)
-        label_font = ("Segoe UI", 14)
+        # Nombre
+        self.lbl_nombre = tk.Label(self.ventana, text="Nombre:", bg="#f0f2f5", fg="#1877f2", font=label_font)
+        self.lbl_nombre.place(x=x_label, y=y_start)
+        self.entry_nombre = tk.Entry(self.ventana, font=entry_font)
+        self.entry_nombre.place(x=x_entry, y=y_start, width=entry_width)
 
-        # Nombre completo
-        self.lbl_nombre = tk.Label(self.ventana, text="Nombre completo:", bg="#f0f2f5", fg="#1877f2", font=label_font)
-        self.lbl_nombre.place(relx=0.25, y=200, anchor=tk.W)
-        self.entry_nombre = tk.Entry(self.ventana, font=entry_font, width=30, bd=2, relief="groove")
-        self.entry_nombre.place(relx=0.45, y=200, anchor=tk.W)
-        Tooltip(self.entry_nombre, "Ingresa tu nombre completo, si solo tienes un nombre, ingrésalo aquí")
-
-        # Apellidos
-        self.lbl_apellidos = tk.Label(self.ventana, text="Apellidos:", bg="#f0f2f5", fg="#1877f2", font=label_font)
-        self.lbl_apellidos.place(relx=0.25, y=250, anchor=tk.W)
-        self.entry_apellidos = tk.Entry(self.ventana, font=entry_font, width=30, bd=2, relief="groove")
-        self.entry_apellidos.place(relx=0.45, y=250, anchor=tk.W)
-        Tooltip(self.entry_apellidos, "Ingresa tus apellidos, si solo tienes uno, ingrésalo aquí")
+        # Apellido
+        self.lbl_apellido = tk.Label(self.ventana, text="Apellido:", bg="#f0f2f5", fg="#1877f2", font=label_font)
+        self.lbl_apellido.place(x=x_label, y=y_start + y_step)
+        self.entry_apellido = tk.Entry(self.ventana, font=entry_font)
+        self.entry_apellido.place(x=x_entry, y=y_start + y_step, width=entry_width)
 
         # Cédula
         self.lbl_cedula = tk.Label(self.ventana, text="Cédula:", bg="#f0f2f5", fg="#1877f2", font=label_font)
-        self.lbl_cedula.place(relx=0.25, y=300, anchor=tk.W)
-        self.entry_cedula = tk.Entry(self.ventana, font=entry_font, width=20, bd=2, relief="groove")
-        self.entry_cedula.place(relx=0.45, y=300, anchor=tk.W)
-        Tooltip(self.entry_cedula, "Ingresa tu número de cédula o documento de identidad, sin puntos, comas o espacios")  
+        self.lbl_cedula.place(x=x_label, y=y_start + 2 * y_step)
+        self.entry_cedula = tk.Entry(self.ventana, font=entry_font)
+        self.entry_cedula.place(x=x_entry, y=y_start + 2 * y_step, width=entry_width)
 
-        # Fecha de nacimiento
-        self.lbl_fecha = tk.Label(self.ventana, text="Fecha de nacimiento (DD/MM/AAAA):", bg="#f0f2f5", fg="#1877f2", font=label_font)
-        self.lbl_fecha.place(relx=0.25, y=350, anchor=tk.W)
-        self.entry_fecha = tk.Entry(self.ventana, font=entry_font, width=15, bd=2, relief="groove")
-        self.entry_fecha.place(relx=0.62, y=350, anchor=tk.W)
-        Tooltip(self.entry_fecha, "Ingresa tu fecha de nacimiento en formato DD/MM/AAAA\n si es un solo dígito de mes o día, usa un 0 al inicio")
+        # Fecha de nacimiento (con calendario)
+        self.lbl_fecha = tk.Label(self.ventana, text="Fecha de nacimiento:", bg="#f0f2f5", fg="#1877f2", font=label_font)
+        self.lbl_fecha.place(x=x_label, y=y_start + 3 * y_step)
+        self.entry_fecha = DateEntry(self.ventana, font=entry_font, width=22, bd=2, relief="groove", date_pattern="dd/MM/yyyy")
+        self.entry_fecha.place(x=x_entry, y=y_start + 3 * y_step, width=entry_width)
 
-        # Correo electrónico (opcional)
-        self.lbl_correo = tk.Label(self.ventana, text="Correo electrónico:", bg="#f0f2f5", fg="#1877f2", font=label_font)
-        self.lbl_correo.place(relx=0.25, y=400, anchor=tk.W)
-        self.entry_correo = tk.Entry(self.ventana, font=entry_font, width=30, bd=2, relief="groove")
-        self.entry_correo.place(relx=0.55, y=400, anchor=tk.W)
-        Tooltip(self.entry_correo, "Ingresa tu correo electrónico activo, si no tienes uno, puedes dejarlo en blanco")
+        # Correo
+        self.lbl_correo = tk.Label(self.ventana, text="Correo:", bg="#f0f2f5", fg="#1877f2", font=label_font)
+        self.lbl_correo.place(x=x_label, y=y_start + 4 * y_step)
+        self.entry_correo = tk.Entry(self.ventana, font=entry_font)
+        self.entry_correo.place(x=x_entry, y=y_start + 4 * y_step, width=entry_width)
 
-        # Crear contraseña
-        self.lbl_password = tk.Label(self.ventana, text="Crear contraseña:", bg="#f0f2f5", fg="#1877f2", font=("Segoe UI", 14))
-        self.lbl_password.place(relx=0.25, y=450, anchor=tk.W)
-        self.entry_password = tk.Entry(self.ventana, font=("Segoe UI", 14), width=30, bd=2, relief="groove", show="*")
-        self.entry_password.place(relx=0.55, y=450, anchor=tk.W)
-        Tooltip(self.entry_password, "Crea una contraseña segura, debe tener al menos 8 caracteres\n debe tener al menos una letra mayúscula, una minúscula, un número y un carácter especial")
+        # Contraseña
+        self.lbl_password = tk.Label(self.ventana, text="Contraseña:", bg="#f0f2f5", fg="#1877f2", font=label_font)
+        self.lbl_password.place(x=x_label, y=y_start + 5 * y_step)
+        self.entry_password = tk.Entry(self.ventana, font=entry_font, show="*")
+        self.entry_password.place(x=x_entry, y=y_start + 5 * y_step, width=entry_width)
+
+        # Botón ver contraseña (icono ojo)
+        self.iconoVer = tk.PhotoImage(file=r"icons/eye.png")
+        self.btnVer = tk.Button(self.ventana, image=self.iconoVer, bd=0, bg="#f0f2f5", activebackground="#f0f2f5", cursor="hand2")
+        self.btnVer.place(width=30, height=30, x=x_entry + entry_width - 30, y=y_start + 5 * y_step)
+        self.btnVer.bind("<Enter>", self.verCaracteres)
+        self.btnVer.bind("<Leave>", self.verCaracteres)
+
+        # Tooltips (opcional)
+        Tooltip(self.entry_nombre, "Ingresa tu nombre\n Debe tener al menos 2 letras\n y solo contener letras")
+        Tooltip(self.entry_apellido, "Ingresa tu apellido\n Debe tener al menos 3 letras\n y solo contener letras")
+        Tooltip(self.entry_cedula, "Ingresa tu cédula\nSolo debe contener números, sin espacios, comas o puntos")
+        Tooltip(self.entry_fecha, "Selecciona tu fecha de nacimiento")
+        Tooltip(self.entry_correo, "Ingresa tu correo electrónico activo\n Ejemplo:usuarionuevo@gmail.com")
+        Tooltip(self.entry_password, "Crea una contraseña segura\n Debe tener al menos 5 caracteres,\nuna mayúscula, una minúscula y un número")
         
         #boton de volver 
         self.btnVolver = tk.Button(
@@ -206,7 +210,13 @@ class VentanaRegistro:
             "Ayuda",
             "Por favor, completa todos los campos requeridos para registrarte.\n"
             "La contraseña debe ser segura y fácil de recordar.\n"
+            "La contraseña debe tener al menos 5 caracteres,\n"
+            "una mayúscula, una minúscula y un número.\n"
+            "Asegúrate de ingresar un correo electrónico válido.\n"
+            "El nombre y apellido deben contener solo letras.\n"
             "Si tienes dudas, contacta al soporte."
+            "Estos campos son obligatorios\n"
+            "para poder acceder a los cursos y servicios de la plataforma.\n"
         )
         
     def regresar_a_principal(self):
@@ -215,7 +225,7 @@ class VentanaRegistro:
     
     def registrar_usuario(self):
         nombre = self.entry_nombre.get()
-        apellido = self.entry_apellidos.get()
+        apellido = self.entry_apellido.get()
         cedula = self.entry_cedula.get()
         fecha_nacimiento = self.entry_fecha.get()
         contrasena = self.entry_password.get()
@@ -232,7 +242,15 @@ class VentanaRegistro:
             usuarios_existentes.append(usuario)  # Simula guardar el usuario
             messagebox.showinfo(
                 "Registro exitoso",
-                f"¡Registro exitoso!\nTu usuario es: {usuario}"
+                f"¡Registro exitoso!\nTu usuario es: {usuario} \n Recuerda tu usuario y contraseña para iniciar sesión más tarde."
             )
             # Aquí puedes limpiar los campos o cerrar la ventana si lo deseas
+
+    def verCaracteres(self, event):
+        # Si el evento es <Enter>, muestra la contraseña
+        if event.type == tk.EventType.Enter:
+            self.entry_password.config(show="")
+        # Si el evento es <Leave>, oculta la contraseña
+        elif event.type == tk.EventType.Leave:
+            self.entry_password.config(show="*")
 
