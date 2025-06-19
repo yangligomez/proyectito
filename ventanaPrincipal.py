@@ -56,11 +56,11 @@ class VentanaPrincipal:
             relief="flat",
             command=self.abrir_registro
         )
-        self.boton1.place(relx=0.5, y=300, anchor=tk.CENTER, width=320, height=50)
+        self.boton1.place(relx=0.5, y=300, anchor=tk.CENTER, width=360, height=50)
         Tooltip(
     self.boton1,
-    "Solo estudiantes pueden registrarse aquí.\n"
-    "Si eres administrador o recepcionista, inicia sesión y solicita tu inscripción."
+    "Solo Estudiantes pueden registrarse aquí.\n"
+    "Si eres administrador o recepcionista da Click en Iniciar sesión."
 )
 
         icono1 = tk.PhotoImage(file="icons/user_add.png")
@@ -104,8 +104,65 @@ class VentanaPrincipal:
         
         self.boton_ayuda.place(x=20, y=20, width=80, height=30)
         Tooltip(self.boton_ayuda, "help\nAbrir ventana de ayuda")
-
         
+        #Boton cerrar
+        self.boton_cerrar = tk.Button(
+            self.ventana,
+            text="Cerrar",
+            bg="#f22618",   
+            fg="white",
+            font=("Segoe UI", 12, "bold"),
+            bd=0,
+            cursor="hand2",
+            relief="flat",
+            command=self.ventana.destroy
+        )
+        self.boton_cerrar.place(x=800, y=20, width=80, height=30)   
+        Tooltip(self.boton_cerrar, "Cerrar la aplicación")
+        
+
+        # --- Botón Menú para Iniciar Sesión ---
+        self.rol_seleccionado = tk.StringVar(value="Iniciar Sesión")
+        self.menu_button = tk.Menubutton(
+            self.ventana,
+            textvariable=self.rol_seleccionado,
+            bg="white",
+            fg="#1877f2",
+            font=("Segoe UI", 18, "bold"),
+            bd=1,
+            highlightbackground="#1877f2",
+            highlightcolor="#1877f2",
+            activebackground="#e7f3ff",
+            activeforeground="#1877f2",
+            cursor="hand2",
+            relief="solid",
+            width=20
+        )
+        self.menu = tk.Menu(self.menu_button, tearoff=0)
+        self.menu.add_command(label="Estudiante", command=lambda: self.seleccionar_rol("Estudiante"))
+        self.menu.add_command(label="Recepcionista", command=lambda: self.seleccionar_rol("Recepcionista"))
+        self.menu.add_command(label="Administrador", command=lambda: self.seleccionar_rol("Administrador"))
+        self.menu_button.config(menu=self.menu)
+        self.menu_button.place(relx=0.5, y=380, anchor=tk.CENTER, width=360, height=50)
+        Tooltip(self.menu_button, "Selecciona el tipo de usuario para iniciar sesión")
+
+        # Botón para confirmar inicio de sesión
+        self.boton_confirmar = tk.Button(
+            self.ventana,
+            text="Confirmar",
+            bg="#1877f2",
+            fg="white",
+            font=("Segoe UI", 14, "bold"),
+            bd=0,
+            activebackground="#166fe5",
+            activeforeground="white",
+            cursor="hand2",
+            relief="flat",
+            command=self.abrir_inicio_sesion
+        )
+        self.boton_confirmar.place(relx=0.5, y=440, anchor=tk.CENTER, width=200, height=40)
+        Tooltip(self.boton_confirmar, "Haz clic para iniciar sesión con el rol seleccionado")
+
     def abrir_registro(self):
         self.ventana.withdraw()
         VentanaRegistro(self.ventana)
@@ -113,15 +170,33 @@ class VentanaPrincipal:
     def volver_a_principal(self):
         self.ventana.deiconify()
         
+    def seleccionar_rol(self, rol):
+        self.rol_seleccionado.set(f"Iniciar Sesión {rol}")
+        self.rol_actual = rol
+
     def abrir_inicio_sesion(self):
+        rol = getattr(self, "rol_actual", None)
+        if not rol:
+            messagebox.showwarning("Selecciona un rol", "Por favor selecciona un rol para iniciar sesión.")
+            return
         self.ventana.withdraw()
-        VentanaInicioSesion(self.ventana)
+        # Aquí puedes abrir la ventana correspondiente según el rol
+        if rol == "Estudiante":
+            VentanaInicioSesion(self.ventana, rol="estudiante")
+        elif rol == "Recepcionista":
+            VentanaInicioSesion(self.ventana, rol="recepcionista")
+        elif rol == "Administrador":
+            VentanaInicioSesion(self.ventana, rol="admin")
+        else:
+            messagebox.showerror("Error", "Rol no reconocido.")
 
     def mostrar_ayuda(self):
         messagebox.showinfo(
         "Ayuda",
-        "Solo estudiantes pueden registrarse desde este botón (Registrarse).\n"
-        "Si eres administrador o recepcionista, debes iniciar sesión y solicitar tu inscripción al administrador."
+        "Solo Estudiantes pueden registrarse desde el botón (Registrarse).\n"
+        "Si eres Estudiante registrado puedes iniciar sesión desde el botón (Iniciar Sesión).\n"
+        "Si eres Administrador o Recepcionista, debes iniciar sesión para acceder a tu inscripción y/o consultas."
+        "Para más información, contacta al servidor."
     )
 
 
