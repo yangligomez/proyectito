@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import messagebox
 from utils import centrar_ventana
 from Tooltip import Tooltip
+from ventanaAdmin import VentanaAdmin  # Asegúrate de importar la clase VentanaAdmin
 
 class VentanaVerificacionAdmin:
     def __init__(self, ventana_principal, callback_exito):
@@ -132,6 +133,8 @@ class VentanaVerificacionAdmin:
         self.btn_ingresar.place(relx=0.5, y=400, anchor="center", width=220, height=50)
         Tooltip(self.btn_ingresar, "Haz clic para ingresar al panel de administrador")
 
+        self.ventana.bind('<Return>', lambda event: self.verificar())
+
     def mostrar_password(self, event=None):
         self.entry_password.config(show="")
 
@@ -150,10 +153,11 @@ class VentanaVerificacionAdmin:
     def verificar(self):
         usuario = self.entry_usuario.get()
         password = self.entry_password.get()
-        # Aquí puedes poner la lógica real de verificación
-        if usuario == "Admin" and password == "Admin123":
+        # Aquí validas las credenciales
+        if usuario == "A" and password == "2":
             self.ventana.destroy()
-            self.callback_exito()
+            # Aquí pasas el nombre real al panel de admin
+            VentanaAdmin(self.ventana_principal, usuario=usuario.capitalize())
         else:
             messagebox.showerror("Error", "Credenciales incorrectas")
 
