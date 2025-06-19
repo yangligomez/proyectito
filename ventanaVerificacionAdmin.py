@@ -96,11 +96,24 @@ class VentanaVerificacionAdmin:
 
         # Botón ver contraseña (icono ojo)
         self.iconoVer = tk.PhotoImage(file=r"icons/eye.png")
-        self.btnVer = tk.Button(self.ventana, image=self.iconoVer, bd=0, bg="#f0f2f5", activebackground="#f0f2f5", cursor="hand2")
+        self.btnVer = tk.Button(
+            self.ventana,
+            image=self.iconoVer,
+            bd=0,
+            bg="#f0f2f5",
+            activebackground="#f0f2f5",
+            cursor="hand2",
+            takefocus=0,  # <-- Esto es importante
+            relief="flat"
+        )
         self.btnVer.place(width=30, height=30, x=x_entry + entry_width - 30, y=y_password)
-        self.btnVer.bind("<Enter>", self.verCaracteres)
-        self.btnVer.bind("<Leave>", self.verCaracteres)
-        Tooltip(self.btnVer, "Mantén el cursor para ver la contraseña")
+        self.btnVer.bind("<Enter>", self.mostrar_password)
+        self.btnVer.bind("<Leave>", self.ocultar_password)
+        self.btnVer.bind("<ButtonPress-1>", self.toggle_password)
+        Tooltip(self.btnVer, "Haz clic para ver la contraseña")
+
+        # Estado para alternar con clic
+        self.password_visible = False
 
         # Botón ingresar
         self.btn_ingresar = tk.Button(
@@ -119,19 +132,26 @@ class VentanaVerificacionAdmin:
         self.btn_ingresar.place(relx=0.5, y=400, anchor="center", width=220, height=50)
         Tooltip(self.btn_ingresar, "Haz clic para ingresar al panel de administrador")
 
-    def verCaracteres(self, event):
-        # Si el evento es <Enter>, muestra la contraseña
-        if event.type == tk.EventType.Enter:
+    def mostrar_password(self, event=None):
+        self.entry_password.config(show="")
+
+    def ocultar_password(self, event=None):
+        if not self.password_visible:
+            self.entry_password.config(show="*")
+
+    def toggle_password(self, event=None):
+        # Alterna visibilidad con clic
+        self.password_visible = not self.password_visible
+        if self.password_visible:
             self.entry_password.config(show="")
-        # Si el evento es <Leave>, oculta la contraseña
-        elif event.type == tk.EventType.Leave:
+        else:
             self.entry_password.config(show="*")
 
     def verificar(self):
         usuario = self.entry_usuario.get()
         password = self.entry_password.get()
         # Aquí puedes poner la lógica real de verificación
-        if usuario == "admin" and password == "admin123":
+        if usuario == "Admin" and password == "Admin123":
             self.ventana.destroy()
             self.callback_exito()
         else:
