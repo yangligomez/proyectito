@@ -4,6 +4,7 @@ from utils import centrar_ventana
 
 class VentanaAdmin:
     def __init__(self, ventana_principal):
+        self.ventana_principal = ventana_principal
         self.ventana = tk.Toplevel(ventana_principal)
         self.ventana.title("Panel de Administrador")
         self.ventana.geometry("900x600")
@@ -20,6 +21,44 @@ class VentanaAdmin:
         fuente_boton = ("Segoe UI", 14, "bold")
         fuente_seccion = ("Segoe UI", 16, "bold")
 
+        # Botón Volver (esquina superior izquierda)
+        self.boton_volver = tk.Button(
+            self.ventana,
+            text="Volver",
+            bg="#1877f2",
+            fg="white",
+            font=("Segoe UI", 12, "bold"),
+            bd=0,
+            cursor="hand2",
+            relief="flat",
+            command=self.volver
+        )
+        self.boton_volver.place(x=20, y=20, width=80, height=30)
+        Tooltip(self.boton_volver, "Regresar a la ventana anterior")
+
+        # Botón Ayuda (debajo de Volver)
+        self.boton_ayuda = tk.Button(
+            self.ventana,
+            text="Ayuda",
+            bg="#f22618",
+            fg="white",
+            font=("Segoe UI", 12, "bold"),
+            bd=0,
+            cursor="hand2",
+            relief="flat",
+            command=self.mostrar_ayuda
+        )
+        self.boton_ayuda.place(x=20, y=60, width=80, height=30)
+        Tooltip(self.boton_ayuda, "¿Necesitas ayuda? Haz clic aquí.")
+
+        # Botón Cerrar sesión (esquina superior derecha)
+        self.btn_cerrar = tk.Button(
+            self.ventana, text="Cerrar sesión", font=("Segoe UI", 12, "bold"), bg="#f22618", fg="white",
+            bd=0, cursor="hand2", relief="flat", command=self.cerrar_admin
+        )
+        self.btn_cerrar.place(x=800, y=20, width=80, height=30)
+        Tooltip(self.btn_cerrar, "Cerrar sesión y regresar al login")
+
         # Título
         self.label = tk.Label(
             self.ventana,
@@ -33,7 +72,7 @@ class VentanaAdmin:
         # --- GESTIÓN DE USUARIOS (Izquierda) ---
         x_izq = 100
         y_inicio = 150
-        sep = 50
+        sep = 100
 
         self.lbl_gestion_usuarios = tk.Label(
             self.ventana,
@@ -104,14 +143,6 @@ class VentanaAdmin:
         self.btn_estadisticas.place(x=x_der, y=y_inicio + 3*sep, width=200, height=40)
         Tooltip(self.btn_estadisticas, "Visualiza estadísticas del sistema")
 
-        # Botón Cerrar sesión (abajo centrado)
-        self.btn_cerrar = tk.Button(
-            self.ventana, text="Cerrar sesión", font=fuente_boton, bg="#f22618", fg="white",
-            bd=0, cursor="hand2", relief="flat", command=self.cerrar_admin
-        )
-        self.btn_cerrar.place(relx=0.5, y=520, anchor="center", width=220, height=40)
-        Tooltip(self.btn_cerrar, "Cerrar sesión y regresar al login")
-
     # Métodos vacíos para implementar después
     def registrar_recepcionista(self):
         pass
@@ -149,11 +180,22 @@ class VentanaAdmin:
     def cerrar_admin(self):
         self.ventana.destroy()
         # Si quieres mostrar la ventana principal de nuevo, descomenta la siguiente línea:
-        # self.ventana.master.deiconify()
+        # self.ventana_principal.deiconify()
 
-# Para pruebas rápidas:
-if __name__ == "__main__":
-    root = tk.Tk()
-    root.withdraw()
-    VentanaAdmin(root)
-    root.mainloop()
+    def mostrar_ayuda(self):
+        tk.messagebox.showinfo(
+            "Ayuda",
+            "Desde aquí puedes gestionar usuarios, cursos, informes y estadísticas.\n"
+            "Usa los botones de la izquierda para usuarios y los de la derecha para cursos.\n"
+            "Para más ayuda, contacta al soporte técnico."
+        )
+
+    def volver(self):
+        respuesta = tk.messagebox.askquestion(
+            "Volver",
+            "¿Estás seguro de que quieres regresar? Se perderán los cambios no guardados.",
+            icon="warning"
+        )
+        if respuesta == "yes":
+            self.ventana.destroy()
+            self.ventana_principal.deiconify()  # Mostrar la ventana principal de nuevo
