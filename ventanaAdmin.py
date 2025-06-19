@@ -3,8 +3,9 @@ from Tooltip import Tooltip
 from utils import centrar_ventana
 
 class VentanaAdmin:
-    def __init__(self, ventana_principal):
+    def __init__(self, ventana_principal, usuario="Administrador"):
         self.ventana_principal = ventana_principal
+        self.usuario = usuario
         self.ventana = tk.Toplevel(ventana_principal)
         self.ventana.title("Panel de Administrador")
         self.ventana.geometry("900x600")
@@ -69,6 +70,16 @@ class VentanaAdmin:
         )
         self.label.place(relx=0.5, y=60, anchor=tk.CENTER)
 
+        # Saludo debajo del título
+        self.label_saludo = tk.Label(
+            self.ventana,
+            text=f"¡Hola, {self.usuario}!",
+            bg=color_fondo,
+            fg=color_principal,
+            font=("Segoe UI", 18, "bold")
+        )
+        self.label_saludo.place(relx=0.5, y=110, anchor=tk.CENTER)
+
         # --- GESTIÓN DE USUARIOS (Izquierda) ---
         x_izq = 100
         y_inicio = 150
@@ -99,13 +110,13 @@ class VentanaAdmin:
         self.btn_recep.place(x=x_izq, y=y_inicio + 2*sep, width=200, height=40)
         Tooltip(self.btn_recep, "Gestiona los recepcionistas del sistema")
 
-        # Botón Cambiar Contraseña
-        self.btn_cambiar_pass = tk.Button(
-            self.ventana, text="Cambiar Contraseña", font=fuente_boton, bg="#e7f3ff", fg=color_principal,
+        # Botón Administradores (antes: Cambiar Contraseña)
+        self.btnAdmin = tk.Button(
+            self.ventana, text="Administradores", font=fuente_boton, bg="white", fg=color_principal,
             bd=1, relief="solid", cursor="hand2", width=18, command=self.cambiar_contrasena
         )
-        self.btn_cambiar_pass.place(x=x_izq, y=y_inicio + 3*sep, width=200, height=40)
-        Tooltip(self.btn_cambiar_pass, "Cambia tu contraseña de administrador")
+        self.btnAdmin.place(x=x_izq, y=y_inicio + 3*sep, width=200, height=40)
+        Tooltip(self.btnAdmin, "Gestiona los administradores del sistema")
 
         # --- GESTIÓN DE CURSOS (Derecha) ---
         x_der = 600
