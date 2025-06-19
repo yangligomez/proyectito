@@ -18,7 +18,7 @@ def generar_usuario_unico(nombre, usuarios_existentes):
         if usuario not in usuarios_existentes:
             return usuario
 
-def validar_campos_registro(nombre, apellido, cedula, fecha_nacimiento, contrasena, correo):
+def validar_campos_registro(nombre, apellido, cedula, telefono, fecha_nacimiento, contrasena, correo):
     # Verifica si todos los campos están vacíos
     if not nombre and not apellido and not cedula and not fecha_nacimiento and not contrasena and not correo:
         messagebox.showerror("Error", "Por favor, completa todos los campos antes de registrarte.")
@@ -40,6 +40,11 @@ def validar_campos_registro(nombre, apellido, cedula, fecha_nacimiento, contrase
     # Cédula: mínimo 6 caracteres, solo números
     if not cedula or len(cedula) < 6 or not cedula.isdigit():
         messagebox.showerror("Error", "La cédula es obligatoria, debe tener al menos 6 dígitos y solo contener números.")
+        return False, None, None
+
+    # Teléfono: obligatorio, solo números, exactamente 10 dígitos
+    if not telefono or not telefono.isdigit() or len(telefono) != 10:
+        messagebox.showerror("Error", "El teléfono es obligatorio, debe contener solo números y tener exactamente 10 dígitos.")
         return False, None, None
 
     # Fecha de nacimiento: formato obligatorio (por ejemplo, DD/MM/AAAA)
@@ -119,28 +124,34 @@ class VentanaRegistro:
         self.entry_cedula = tk.Entry(self.ventana, font=entry_font)
         self.entry_cedula.place(x=x_entry, y=y_start + 2 * y_step, width=entry_width)
 
+        # Teléfono 
+        self.lbl_telefono = tk.Label(self.ventana, text="Teléfono:", bg="#f0f2f5", fg="#1877f2", font=label_font)
+        self.lbl_telefono.place(x=x_label, y=y_start + 3 * y_step)
+        self.entry_telefono = tk.Entry(self.ventana, font=entry_font)
+        self.entry_telefono.place(x=x_entry, y=y_start + 3 * y_step, width=entry_width)
+
         # Fecha de nacimiento (con calendario)
         self.lbl_fecha = tk.Label(self.ventana, text="Fecha de nacimiento:", bg="#f0f2f5", fg="#1877f2", font=label_font)
-        self.lbl_fecha.place(x=x_label, y=y_start + 3 * y_step)
+        self.lbl_fecha.place(x=x_label, y=y_start + 4 * y_step)
         self.entry_fecha = DateEntry(self.ventana, font=entry_font, width=22, bd=2, relief="groove", date_pattern="dd/MM/yyyy")
-        self.entry_fecha.place(x=x_entry, y=y_start + 3 * y_step, width=entry_width)
+        self.entry_fecha.place(x=x_entry, y=y_start + 4 * y_step, width=entry_width)
 
         # Correo
         self.lbl_correo = tk.Label(self.ventana, text="Correo:", bg="#f0f2f5", fg="#1877f2", font=label_font)
-        self.lbl_correo.place(x=x_label, y=y_start + 4 * y_step)
+        self.lbl_correo.place(x=x_label, y=y_start + 5 * y_step)
         self.entry_correo = tk.Entry(self.ventana, font=entry_font)
-        self.entry_correo.place(x=x_entry, y=y_start + 4 * y_step, width=entry_width)
+        self.entry_correo.place(x=x_entry, y=y_start + 5 * y_step, width=entry_width)
 
         # Contraseña
         self.lbl_password = tk.Label(self.ventana, text="Contraseña:", bg="#f0f2f5", fg="#1877f2", font=label_font)
-        self.lbl_password.place(x=x_label, y=y_start + 5 * y_step)
+        self.lbl_password.place(x=x_label, y=y_start + 6 * y_step)
         self.entry_password = tk.Entry(self.ventana, font=entry_font, show="*")
-        self.entry_password.place(x=x_entry, y=y_start + 5 * y_step, width=entry_width)
+        self.entry_password.place(x=x_entry, y=y_start + 6 * y_step, width=entry_width)
 
         # Botón ver contraseña (icono ojo)
         self.iconoVer = tk.PhotoImage(file=r"icons/eye.png")
         self.btnVer = tk.Button(self.ventana, image=self.iconoVer, bd=0, bg="#f0f2f5", activebackground="#f0f2f5", cursor="hand2")
-        self.btnVer.place(width=30, height=30, x=x_entry + entry_width - 30, y=y_start + 5 * y_step)
+        self.btnVer.place(width=30, height=30, x=x_entry + entry_width - 30, y=y_start + 6 * y_step)
         self.btnVer.bind("<Enter>", self.verCaracteres)
         self.btnVer.bind("<Leave>", self.verCaracteres)
 
@@ -148,6 +159,7 @@ class VentanaRegistro:
         Tooltip(self.entry_nombre, "Ingresa tu nombre\n Debe tener al menos 2 letras\n y solo contener letras")
         Tooltip(self.entry_apellido, "Ingresa tu apellido\n Debe tener al menos 3 letras\n y solo contener letras")
         Tooltip(self.entry_cedula, "Ingresa tu cédula\nSolo debe contener números, sin espacios, comas o puntos")
+        Tooltip(self.entry_telefono, "Ingresa tu número de teléfono\nDebe tener exactamente 10 dígitos\nSolo debe contener números enteros")
         Tooltip(self.entry_fecha, "Selecciona tu fecha de nacimiento")
         Tooltip(self.entry_correo, "Ingresa tu correo electrónico activo\n Ejemplo:usuarionuevo@gmail.com")
         Tooltip(self.entry_password, "Crea una contraseña segura\n Debe tener al menos 5 caracteres,\nuna mayúscula, una minúscula y un número")
@@ -227,12 +239,13 @@ class VentanaRegistro:
         nombre = self.entry_nombre.get()
         apellido = self.entry_apellido.get()
         cedula = self.entry_cedula.get()
+        telefono = self.entry_telefono.get()  # <-- Nuevo
         fecha_nacimiento = self.entry_fecha.get()
         contrasena = self.entry_password.get()
         correo = self.entry_correo.get()
 
         valido, nombre_min, apellido_min = validar_campos_registro(
-            nombre, apellido, cedula, fecha_nacimiento, contrasena, correo
+            nombre, apellido, cedula, telefono, fecha_nacimiento, contrasena, correo
         )
         if not nombre and not apellido and not cedula and not fecha_nacimiento and not contrasena and not correo:
             messagebox.showerror("Error", "Por favor, completa todos los campos antes de registrarte.")
