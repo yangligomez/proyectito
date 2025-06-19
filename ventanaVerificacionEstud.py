@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import messagebox
 from utils import centrar_ventana
 from Tooltip import Tooltip
+from ventanaEstudiante import Estudiante
 
 class VentanaVerificacionEstud:
     def __init__(self, ventana_principal, callback_exito):
@@ -151,6 +152,8 @@ class VentanaVerificacionEstud:
         # Aquí puedes poner la lógica real de verificación
         if usuario == "Estudiante" and password == "Estudiante123":
             self.ventana.destroy()
+            # Abre el panel del estudiante automáticamente
+            Estudiante("12345678", "Juan", "Pérez", "321654987", "juanp@gmail.com")
             self.callback_exito()
         else:
             messagebox.showerror("Error", "Credenciales incorrectas")
