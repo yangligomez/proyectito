@@ -5,6 +5,8 @@ from ventanaRegistro import VentanaRegistro
 from ventanaInicioSesion import VentanaInicioSesion
 from ventanaVerificacionAdmin import VentanaVerificacionAdmin
 from ventanaAdmin import VentanaAdmin
+from ventanaVerificacionRecep import VentanaVerificacionRecep
+from ventanaVerificacionEstud import VentanaVerificacionEstud
 from utils import centrar_ventana
 from tkinter import messagebox
 
@@ -183,9 +185,16 @@ class VentanaPrincipal:
             return
         self.ventana.withdraw()
         if rol == "Estudiante":
-            VentanaInicioSesion(self.ventana, rol="estudiante")
+            def abrir_panel_estudiante():
+                # Aquí puedes abrir el panel principal del estudiante o mostrar un mensaje
+                messagebox.showinfo("Estudiante", "¡Bienvenido, estudiante!")
+                self.ventana.deiconify()
+            VentanaVerificacionEstud(self.ventana, abrir_panel_estudiante)
         elif rol == "Recepcionista":
-            VentanaInicioSesion(self.ventana, rol="recepcionista")
+            def abrir_panel_recep():
+                messagebox.showinfo("Recepcionista", "¡Bienvenido, recepcionista!")
+                self.ventana.deiconify()
+            VentanaVerificacionRecep(self.ventana, abrir_panel_recep)
         elif rol == "Administrador":
             def abrir_panel_admin():
                 VentanaAdmin(self.ventana)
