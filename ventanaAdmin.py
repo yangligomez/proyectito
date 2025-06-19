@@ -18,6 +18,7 @@ class VentanaAdmin:
         color_principal = "#1877f2"
         fuente_titulo = ("Segoe UI", 28, "bold")
         fuente_boton = ("Segoe UI", 14, "bold")
+        fuente_seccion = ("Segoe UI", 16, "bold")
 
         # Título
         self.label = tk.Label(
@@ -29,57 +30,86 @@ class VentanaAdmin:
         )
         self.label.place(relx=0.5, y=60, anchor=tk.CENTER)
 
-        # Menú de funcionalidades principales
-        y_menu = 140
-        x_menu = 120
-        sep_menu = 200
+        # --- GESTIÓN DE USUARIOS (Izquierda) ---
+        x_izq = 100
+        y_inicio = 150
+        sep = 50
 
-        # Gestión de Recepcionistas
-        self.menu_recep = tk.Menubutton(self.ventana, text="Recepcionistas", font=fuente_boton, bg="white", fg=color_principal, bd=1, relief="solid", width=18, cursor="hand2")
-        self.menu_recep.menu = tk.Menu(self.menu_recep, tearoff=0)
-        self.menu_recep["menu"] = self.menu_recep.menu
-        self.menu_recep.menu.add_command(label="Registrar nuevo", command=self.registrar_recepcionista)
-        self.menu_recep.menu.add_command(label="Consultar/Editar/Eliminar", command=self.gestionar_recepcionistas)
-        self.menu_recep.place(x=x_menu, y=y_menu, width=180, height=40)
-        Tooltip(self.menu_recep, "Gestiona los recepcionistas del sistema")
+        self.lbl_gestion_usuarios = tk.Label(
+            self.ventana,
+            text="GESTIÓN DE USUARIOS",
+            bg=color_fondo,
+            fg=color_principal,
+            font=fuente_seccion
+        )
+        self.lbl_gestion_usuarios.place(x=x_izq, y=y_inicio)
 
-        # Gestión de Estudiantes
-        self.menu_estudiantes = tk.Menubutton(self.ventana, text="Estudiantes", font=fuente_boton, bg="white", fg=color_principal, bd=1, relief="solid", width=18, cursor="hand2")
-        self.menu_estudiantes.menu = tk.Menu(self.menu_estudiantes, tearoff=0)
-        self.menu_estudiantes["menu"] = self.menu_estudiantes.menu
-        self.menu_estudiantes.menu.add_command(label="Ver lista", command=self.ver_lista_estudiantes)
-        self.menu_estudiantes.menu.add_command(label="Buscar por cédula/nombre", command=self.buscar_estudiante)
-        self.menu_estudiantes.menu.add_command(label="Editar/Eliminar", command=self.gestionar_estudiantes)
-        self.menu_estudiantes.place(x=x_menu + sep_menu, y=y_menu, width=180, height=40)
-        Tooltip(self.menu_estudiantes, "Gestiona los estudiantes registrados")
+        # Botón Estudiantes
+        self.btn_estudiantes = tk.Button(
+            self.ventana, text="Estudiantes", font=fuente_boton, bg="white", fg=color_principal,
+            bd=1, relief="solid", cursor="hand2", width=18, command=self.ver_lista_estudiantes
+        )
+        self.btn_estudiantes.place(x=x_izq, y=y_inicio + sep, width=200, height=40)
+        Tooltip(self.btn_estudiantes, "Gestiona los estudiantes registrados")
 
-        # Gestión de Cursos
-        self.menu_cursos = tk.Menubutton(self.ventana, text="Oferta de Cursos", font=fuente_boton, bg="white", fg=color_principal, bd=1, relief="solid", width=18, cursor="hand2")
-        self.menu_cursos.menu = tk.Menu(self.menu_cursos, tearoff=0)
-        self.menu_cursos["menu"] = self.menu_cursos.menu
-        self.menu_cursos.menu.add_command(label="Crear nuevo curso", command=self.crear_curso)
-        self.menu_cursos.menu.add_command(label="Modificar/Cerrar curso", command=self.modificar_curso)
-        self.menu_cursos.menu.add_command(label="Ver cursos activos/cerrados", command=self.ver_cursos)
-        self.menu_cursos.place(x=x_menu + 2*sep_menu, y=y_menu, width=180, height=40)
-        Tooltip(self.menu_cursos, "Gestiona la oferta de cursos")
+        # Botón Recepcionistas
+        self.btn_recep = tk.Button(
+            self.ventana, text="Recepcionistas", font=fuente_boton, bg="white", fg=color_principal,
+            bd=1, relief="solid", cursor="hand2", width=18, command=self.gestionar_recepcionistas
+        )
+        self.btn_recep.place(x=x_izq, y=y_inicio + 2*sep, width=200, height=40)
+        Tooltip(self.btn_recep, "Gestiona los recepcionistas del sistema")
 
-        # Informes e informes de inscripción
-        self.btn_informes = tk.Button(self.ventana, text="Informes de Inscripción", font=fuente_boton, bg="white", fg=color_principal, bd=1, relief="solid", cursor="hand2", command=self.generar_informes)
-        self.btn_informes.place(x=180, y=220, width=220, height=40)
-        Tooltip(self.btn_informes, "Genera y exporta informes de inscripción")
-
-        # Estadísticas generales
-        self.btn_estadisticas = tk.Button(self.ventana, text="Estadísticas Generales", font=fuente_boton, bg="white", fg=color_principal, bd=1, relief="solid", cursor="hand2", command=self.ver_estadisticas)
-        self.btn_estadisticas.place(x=500, y=220, width=220, height=40)
-        Tooltip(self.btn_estadisticas, "Visualiza estadísticas del sistema")
-
-        # Opciones comunes
-        self.btn_cambiar_pass = tk.Button(self.ventana, text="Cambiar Contraseña", font=fuente_boton, bg="#e7f3ff", fg=color_principal, bd=1, relief="solid", cursor="hand2", command=self.cambiar_contrasena)
-        self.btn_cambiar_pass.place(x=180, y=500, width=220, height=40)
+        # Botón Cambiar Contraseña
+        self.btn_cambiar_pass = tk.Button(
+            self.ventana, text="Cambiar Contraseña", font=fuente_boton, bg="#e7f3ff", fg=color_principal,
+            bd=1, relief="solid", cursor="hand2", width=18, command=self.cambiar_contrasena
+        )
+        self.btn_cambiar_pass.place(x=x_izq, y=y_inicio + 3*sep, width=200, height=40)
         Tooltip(self.btn_cambiar_pass, "Cambia tu contraseña de administrador")
 
-        self.btn_cerrar = tk.Button(self.ventana, text="Cerrar sesión", font=fuente_boton, bg="#f22618", fg="white", bd=0, cursor="hand2", relief="flat", command=self.cerrar_admin)
-        self.btn_cerrar.place(x=500, y=500, width=220, height=40)
+        # --- GESTIÓN DE CURSOS (Derecha) ---
+        x_der = 600
+
+        self.lbl_gestion_cursos = tk.Label(
+            self.ventana,
+            text="GESTIÓN DE CURSOS",
+            bg=color_fondo,
+            fg=color_principal,
+            font=fuente_seccion
+        )
+        self.lbl_gestion_cursos.place(x=x_der, y=y_inicio)
+
+        # Botón Oferta de Cursos
+        self.btn_cursos = tk.Button(
+            self.ventana, text="Oferta de Cursos", font=fuente_boton, bg="white", fg=color_principal,
+            bd=1, relief="solid", cursor="hand2", width=18, command=self.crear_curso
+        )
+        self.btn_cursos.place(x=x_der, y=y_inicio + sep, width=200, height=40)
+        Tooltip(self.btn_cursos, "Gestiona la oferta de cursos")
+
+        # Botón Informes de Inscripción
+        self.btn_informes = tk.Button(
+            self.ventana, text="Informes de Inscripción", font=fuente_boton, bg="white", fg=color_principal,
+            bd=1, relief="solid", cursor="hand2", width=18, command=self.generar_informes
+        )
+        self.btn_informes.place(x=x_der, y=y_inicio + 2*sep, width=200, height=40)
+        Tooltip(self.btn_informes, "Genera y exporta informes de inscripción")
+
+        # Botón Estadísticas Generales
+        self.btn_estadisticas = tk.Button(
+            self.ventana, text="Estadísticas Generales", font=fuente_boton, bg="white", fg=color_principal,
+            bd=1, relief="solid", cursor="hand2", width=18, command=self.ver_estadisticas
+        )
+        self.btn_estadisticas.place(x=x_der, y=y_inicio + 3*sep, width=200, height=40)
+        Tooltip(self.btn_estadisticas, "Visualiza estadísticas del sistema")
+
+        # Botón Cerrar sesión (abajo centrado)
+        self.btn_cerrar = tk.Button(
+            self.ventana, text="Cerrar sesión", font=fuente_boton, bg="#f22618", fg="white",
+            bd=0, cursor="hand2", relief="flat", command=self.cerrar_admin
+        )
+        self.btn_cerrar.place(relx=0.5, y=520, anchor="center", width=220, height=40)
         Tooltip(self.btn_cerrar, "Cerrar sesión y regresar al login")
 
     # Métodos vacíos para implementar después
