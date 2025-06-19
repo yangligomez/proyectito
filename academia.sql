@@ -7,7 +7,7 @@
 -- Versión del servidor: 9.1.0
 -- Versión de PHP: 8.3.14
 
-SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET SQL_MODE = 'NO_AUTO_VALUE_ON_ZERO';
 START TRANSACTION;
 SET time_zone = "+00:00";
 
