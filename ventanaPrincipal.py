@@ -3,6 +3,8 @@ from Tooltip import Tooltip
 from PIL import Image, ImageTk
 from ventanaRegistro import VentanaRegistro
 from ventanaInicioSesion import VentanaInicioSesion
+from ventanaVerificacionAdmin import VentanaVerificacionAdmin
+from ventanaAdmin import VentanaAdmin
 from utils import centrar_ventana
 from tkinter import messagebox
 
@@ -180,13 +182,14 @@ class VentanaPrincipal:
             messagebox.showwarning("Selecciona un rol", "Por favor selecciona un rol para iniciar sesión.")
             return
         self.ventana.withdraw()
-        # Aquí puedes abrir la ventana correspondiente según el rol
         if rol == "Estudiante":
             VentanaInicioSesion(self.ventana, rol="estudiante")
         elif rol == "Recepcionista":
             VentanaInicioSesion(self.ventana, rol="recepcionista")
         elif rol == "Administrador":
-            VentanaInicioSesion(self.ventana, rol="admin")
+            def abrir_panel_admin():
+                VentanaAdmin(self.ventana)
+            VentanaVerificacionAdmin(self.ventana, abrir_panel_admin)
         else:
             messagebox.showerror("Error", "Rol no reconocido.")
 
