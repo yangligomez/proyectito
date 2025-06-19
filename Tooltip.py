@@ -7,12 +7,10 @@ class Tooltip:
         self.tooltip = None
         self.widget.bind("<Enter>", self.show_tooltip)
         self.widget.bind("<Leave>", self.hide_tooltip)
+        self.widget.bind("<ButtonPress>", self.hide_tooltip)  # Oculta el tooltip antes del click
 
     def show_tooltip(self, event=None):
-        # Destruye cualquier tooltip anterior
         self.hide_tooltip()
-
-        # Intenta obtener la posición, si falla usa (0,0)
         try:
             x, y, _, _ = self.widget.bbox("insert")
         except Exception:
@@ -23,6 +21,12 @@ class Tooltip:
         self.tooltip = tk.Toplevel(self.widget)
         self.tooltip.wm_overrideredirect(True)
         self.tooltip.wm_geometry(f"+{x}+{y}")
+        # Hace la ventana tooltip "passthrough" para eventos del mouse (solo en Windows 8+)
+        if hasattr(self.tooltip, 'attributes'):
+            try:
+                self.tooltip.attributes('white', '#ffffe0')
+            except Exception:
+                pass
         label = tk.Label(
             self.tooltip,
             text=self.text,
