@@ -15,7 +15,7 @@ class Estudiante:
         self.imagenes = {}
 
         # Ventana principal
-        self.ventana = tk.Tk()
+        self.ventana = tk.Toplevel()
         self.ventana.title(f"Bienvenido {self.nombre}")
         self.ventana.geometry("900x600")
         self.ventana.configure(bg="#f0f2f5")  # Color de fondo
