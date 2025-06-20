@@ -101,7 +101,7 @@ class VentanaRecepcionista:
         self.btn_gestionar_estudiantes.place(x=x_izq, y=y_inicio + sep, width=200, height=40)
         Tooltip(self.btn_gestionar_estudiantes, "Ver, buscar, agregar, editar o eliminar estudiantes")
 
-        # Gestión de inscripciones (Interfaz sin funcionalidad)
+        
         x_der = 540
 
         self.lbl_gestion_inscripciones = tk.Label(
@@ -148,8 +148,4 @@ class VentanaRecepcionista:
         self.ventana.destroy()
         self.ventana_principal.deiconify()
 
-if __name__ == "__main__":
-    root = tk.Tk()
-    root.withdraw()
-    app = VentanaRecepcionista(root, "Recepcionista de Prueba")
-    root.mainloop()
+
