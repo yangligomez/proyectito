@@ -156,7 +156,7 @@ class Estudiante:
     def mostrar_cursos_disponibles(self):
         self.crear_contenedor()
 
-        self.crear_tarjeta_curso("Curso de Barismo", 50, 50, "imagenes/barismo (1).png",
+        self.crear_tarjeta_curso("Curso de Barismo", 50, 50, "imagenes/barismo.png",
                                 "Aprende a preparar café de calidad y técnicas de barismo.")
         self.crear_tarjeta_curso("Curso de Técnico en Celulares", 300, 50, "imagenes/tecnico.png",
                                 "Aprende a reparar dispositivos móviles y técnicas de diagnóstico.")
@@ -175,7 +175,7 @@ class Estudiante:
         # Información de los cursos
         info_cursos = {
             "Curso de Barismo": {
-                "imagen": "imagenes/barismo (1).png",
+                "imagen": "imagenes/barismo.png",
                 "descripcion": "Aprende a preparar café de calidad y técnicas de barismo."
             },
             "Curso de Técnico en Celulares": {

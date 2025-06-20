@@ -149,13 +149,7 @@ class VentanaRegistro:
         self.entry_password.place(x=x_entry, y=y_start + 6 * y_step, width=entry_width)
         import tkinter.ttk as ttk  # Asegúrate de importar esto arriba del archivo
 
-        # Rol (nuevo campo)
-        self.lbl_rol = tk.Label(self.ventana, text="Rol:", bg="#f0f2f5", fg="#1877f2", font=label_font)
-        self.lbl_rol.place(x=x_label, y=y_start + 7 * y_step)
-        self.combo_rol = ttk.Combobox(self.ventana, font=entry_font, values=["estudiante", "recepcionista"])
-        self.combo_rol.place(x=x_entry, y=y_start + 7 * y_step, width=entry_width)
-        self.combo_rol.set("estudiante")  # Valor predeterminado
-        Tooltip(self.combo_rol, "Selecciona tu rol en la plataforma")
+
         # Botón ver contraseña (icono ojo)
         self.iconoVer = tk.PhotoImage(file=r"icons/eye.png")
         self.btnVer = tk.Button(self.ventana, image=self.iconoVer, bd=0, bg="#f0f2f5", activebackground="#f0f2f5", cursor="hand2")
