@@ -69,30 +69,9 @@ class VentanaPrincipal:
         icono1 = tk.PhotoImage(file="icons/user_add.png")
         self.boton1.config(image=icono1, compound=tk.LEFT, padx=10)
         self.boton1.image = icono1  # Mantener una referencia al icono
-
-        # Botón Iniciar Sesión
-        self.boton2 = tk.Button(
-            self.ventana,
-            text="Iniciar Sesión",
-            bg="white",
-            fg="#1877f2",
-            font=("Segoe UI", 18, "bold"),
-            bd=1,
-            highlightbackground="#1877f2",
-            highlightcolor="#1877f2",
-            activebackground="#e7f3ff",
-            activeforeground="#1877f2",
-            cursor="hand2",
-            relief="solid",
-            command=self.abrir_inicio_sesion
-        )
-        self.boton2.place(relx=0.5, y=380, anchor=tk.CENTER, width=320, height=50)
-        Tooltip(self.boton2, "Si ya tienes una cuenta, inicia sesión aquí")
         
-        icono2 = tk.PhotoImage(file="icons/user_go.png")
-        self.boton2.config(image=icono2, compound=tk.LEFT, padx=10)
-        self.boton2.image = icono2  # Mantener una referencia al icono
 
+        
         # Botón Ayuda
         self.boton_ayuda = tk.Button(
         self.ventana,
@@ -148,6 +127,7 @@ class VentanaPrincipal:
         self.menu_button.config(menu=self.menu)
         self.menu_button.place(relx=0.5, y=380, anchor=tk.CENTER, width=360, height=50)
         Tooltip(self.menu_button, "Selecciona el tipo de usuario para iniciar sesión")
+        
 
         # Botón para confirmar inicio de sesión
         self.boton_confirmar = tk.Button(
