@@ -150,10 +150,10 @@ class VentanaVerificacionEstud:
         usuario = self.entry_usuario.get()
         password = self.entry_password.get()
         # Aquí puedes poner la lógica real de verificación
-        if usuario == "Estudiante" and password == "Estudiante123":
-            self.ventana.destroy()
+        if usuario == "E" and password == "123":
+            self.ventana.withdraw()
             # Abre el panel del estudiante automáticamente
-            Estudiante("12345678", "Juan", "Pérez", "321654987", "juanp@gmail.com")
+            Estudiante(self.ventana, "12345678", "Juan", "Pérez", "321654987", "juanp@gmail.com")
             self.callback_exito()
         else:
             messagebox.showerror("Error", "Credenciales incorrectas")
