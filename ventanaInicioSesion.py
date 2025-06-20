@@ -124,9 +124,7 @@ class VentanaInicioSesion:
             if resultado:
                 rol = resultado[0]
                 messagebox.showinfo("Éxito", f"Sesión iniciada como {rol}")
-                # Aquí puedes abrir la ventana correspondiente según el rol
-                # if rol == "administrador":
-                #     VentanaAdmin(self.ventana)
+
             else:
                 messagebox.showerror("Error", "Credenciales inválidas.")
         except Exception as e:

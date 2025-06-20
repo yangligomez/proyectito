@@ -149,7 +149,6 @@ class VentanaVerificacionEstud:
     def verificar(self):
         usuario = self.entry_usuario.get()
         password = self.entry_password.get()
-        # Aquí puedes poner la lógica real de verificación
         if usuario == "E" and password == "123":
             self.ventana.withdraw()
             # Abre el panel del estudiante automáticamente

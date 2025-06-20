@@ -153,10 +153,8 @@ class VentanaVerificacionAdmin:
     def verificar(self):
         usuario = self.entry_usuario.get()
         password = self.entry_password.get()
-        # Aquí validas las credenciales
         if usuario == "A" and password == "2":
             self.ventana.destroy()
-            # Aquí pasas el nombre real al panel de admin
             VentanaAdmin(self.ventana_principal, usuario=usuario.capitalize())
         else:
             messagebox.showerror("Error", "Credenciales incorrectas")
@@ -169,7 +167,6 @@ class VentanaVerificacionAdmin:
         )
 
     def regresar(self):
-        # Lógica para regresar a la ventana principal o cerrar sesión
         respuesta = messagebox.askquestion(
             "Regresar",
             "¿Estás seguro de que quieres regresar? Se perderán los cambios no guardados.",

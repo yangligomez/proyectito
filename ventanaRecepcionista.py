@@ -80,7 +80,7 @@ class VentanaRecepcionista:
         )
         self.label_saludo.place(relx=0.5, y=110, anchor=tk.CENTER)
 
-        # Gestión de estudiantes (Interfaz sin funcionalidad)
+        # Gestión de estudiantes
         x_izq = 80
         y_inicio = 180
         sep = 100
