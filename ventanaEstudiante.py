@@ -119,8 +119,7 @@ class Estudiante:
 
         # Cargar imagen
         ruta_absoluta = os.path.join(os.path.dirname(__file__), ruta_imagen)
-        print("Probando imagen:", ruta_absoluta)
-        print("¿Existe?", os.path.exists(ruta_absoluta))
+       
         try:
             imagen_tk = tk.PhotoImage(file=ruta_absoluta)
             fondo = tk.Label(tarjeta, image=imagen_tk, bg="white")
