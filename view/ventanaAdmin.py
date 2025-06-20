@@ -1,6 +1,13 @@
 import tkinter as tk
 from Tooltip import Tooltip
 from utils import centrar_ventana
+from controller.controlador import (
+agregar_recepcionista, editar_recepcionista, eliminar_recepcionista,
+agregar_estudiante, editar_estudiante, eliminar_estudiante,
+agregar_curso, editar_curso, eliminar_curso,
+generar_informe_inscripciones
+)
+
 
 class VentanaAdmin:
     def __init__(self, ventana_principal, usuario="Administrador"):
@@ -148,21 +155,41 @@ class VentanaAdmin:
         self.btn_estadisticas.place(x=x_der, y=y_inicio + 3*sep, width=200, height=50)
         Tooltip(self.btn_estadisticas, "Visualiza estadísticas del sistema")
 
-    # Métodos vacíos (solo los botones de Volver y Ayuda funcionan)
     def ver_lista_estudiantes(self):
-        pass
+
+        datos = (
+            "12345678", "Juan", "Pérez", "123456789", "juan@email.com", "juanuser", "1234"
+        )
+        agregar_estudiante(datos)
+        tk.messagebox.showinfo("Éxito", "Estudiante agregado (ejemplo).")
 
     def gestionar_recepcionistas(self):
-        pass
-
+        datos = (
+            "87654321", "Ana", "Gómez", "987654321", "ana@email.com", "anauser", "abcd"
+        )
+        agregar_recepcionista(datos)
+        tk.messagebox.showinfo("Éxito", "Recepcionista agregado (ejemplo).")
     def cambiar_contrasena(self):
         pass
 
     def crear_curso(self):
-        pass
-
+        datos = (
+            "Python Básico", "Curso introductorio de Python", 30
+        )
+        agregar_curso(datos)
+        tk.messagebox.showinfo("Éxito", "Curso agregado (ejemplo).")
     def generar_informes(self):
-        pass
+        informe = generar_informe_inscripciones()
+        if informe:
+            texto = ""
+            for fila in informe:
+                texto += (
+                    f"Estudiante: {fila['cedula']} - {fila['nombre']} {fila['apellido']}\n"
+                    f"Curso: {fila['curso']} | Fecha: {fila['fecha_inscripcion']}\n\n"
+                )
+            tk.messagebox.showinfo("Informe de Inscripciones", texto)
+        else:
+            tk.messagebox.showinfo("Informe de Inscripciones", "No hay inscripciones registradas.")
 
     def ver_estadisticas(self):
         pass

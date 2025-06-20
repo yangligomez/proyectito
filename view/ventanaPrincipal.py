@@ -1,11 +1,11 @@
 import tkinter as tk 
 from Tooltip import Tooltip
-from ventanaRegistro import VentanaRegistro
-from ventanaInicioSesion import VentanaInicioSesion
-from ventanaVerificacionAdmin import VentanaVerificacionAdmin
-from ventanaAdmin import VentanaAdmin
-from ventanaVerificacionRecep import VentanaVerificacionRecep
-from ventanaVerificacionEstud import VentanaVerificacionEstud
+from view.ventanaRegistro import VentanaRegistro
+from view.ventanaInicioSesion import VentanaInicioSesion
+from view.ventanaVerificacionAdmin import VentanaVerificacionAdmin
+from view.ventanaAdmin import VentanaAdmin
+from view.ventanaVerificacionRecep import VentanaVerificacionRecep
+from view.ventanaVerificacionEstud import VentanaVerificacionEstud
 from utils import centrar_ventana
 from tkinter import messagebox
 

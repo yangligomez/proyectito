@@ -1,3 +1,16 @@
+from conexion import obtener_conexion
+
+def obtener_recepcionista_por_usuario(usuario):
+    conexion = obtener_conexion()
+    cursor = conexion.cursor(dictionary=True)
+    cursor.execute("SELECT * FROM recepcionista WHERE usuario = %s", (usuario,))
+    recepcionista = cursor.fetchone()
+    cursor.close()
+    conexion.close()
+    return recepcionista
+
+
+
 class Recepcionista:
     def __init__(self, cedula, nombre, apellido, telefono, email):
         self.cedula = cedula
@@ -55,3 +68,6 @@ class Recepcionista:
             print(f"Estudiante {accion} correctamente.")
         except Exception as e:
             print("Error en gestión:", e)
+
+
+

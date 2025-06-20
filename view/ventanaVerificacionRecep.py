@@ -2,7 +2,7 @@ import tkinter as tk
 from tkinter import messagebox
 from utils import centrar_ventana
 from Tooltip import Tooltip
-from ventanaRecepcionista import VentanaRecepcionista
+from view.ventanaRecepcionista import VentanaRecepcionista
 
 class VentanaVerificacionRecep:
     def __init__(self, ventana_principal):

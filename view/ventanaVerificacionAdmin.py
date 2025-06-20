@@ -2,7 +2,7 @@ import tkinter as tk
 from tkinter import messagebox
 from utils import centrar_ventana
 from Tooltip import Tooltip
-from ventanaAdmin import VentanaAdmin  # Asegúrate de importar la clase VentanaAdmin
+from view.ventanaAdmin import VentanaAdmin  # Asegúrate de importar la clase VentanaAdmin
 
 class VentanaVerificacionAdmin:
     def __init__(self, ventana_principal, callback_exito):

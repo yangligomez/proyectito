@@ -1,6 +1,5 @@
 import tkinter as tk
-from ventanaPrincipal import VentanaPrincipal
-
+from view.ventanaPrincipal import VentanaPrincipal
 class Main:
     def __init__(self):
         self.root = tk.Tk()
