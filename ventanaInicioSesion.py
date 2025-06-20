@@ -63,7 +63,8 @@ class VentanaInicioSesion:
             activebackground="#166fe5",
             activeforeground="white",
             cursor="hand2",
-            relief="flat"
+            relief="flat",
+            command=self.verificar_credenciales,
         )
         self.btn_iniciar.place(relx=0.5, y=400, anchor=tk.CENTER, width=220, height=45)
         Tooltip(self.btn_iniciar, "Haz clic para iniciar sesión")
@@ -106,3 +107,27 @@ class VentanaInicioSesion:
     def regresar_a_principal(self):
         self.ventana_principal.deiconify()
         self.ventana.destroy()
+
+    def verificar_credenciales(self):
+        from conexion import obtener_conexion
+        from tkinter import messagebox
+        usuario = self.entry_usuario.get()
+        clave = self.entry_password.get()
+
+        conn = obtener_conexion()
+        cursor = conn.cursor()
+
+        try:
+            cursor.execute("SELECT rol FROM usuario WHERE username=%s AND password=%s", (usuario, clave))
+            resultado = cursor.fetchone()
+
+            if resultado:
+                rol = resultado[0]
+                messagebox.showinfo("Éxito", f"Sesión iniciada como {rol}")
+                # Aquí puedes abrir la ventana correspondiente según el rol
+                # if rol == "administrador":
+                #     VentanaAdmin(self.ventana)
+            else:
+                messagebox.showerror("Error", "Credenciales inválidas.")
+        except Exception as e:
+            print("Error al verificar credenciales:", e)

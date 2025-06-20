@@ -147,7 +147,15 @@ class VentanaRegistro:
         self.lbl_password.place(x=x_label, y=y_start + 6 * y_step)
         self.entry_password = tk.Entry(self.ventana, font=entry_font, show="*")
         self.entry_password.place(x=x_entry, y=y_start + 6 * y_step, width=entry_width)
+        import tkinter.ttk as ttk  # Asegúrate de importar esto arriba del archivo
 
+        # Rol (nuevo campo)
+        self.lbl_rol = tk.Label(self.ventana, text="Rol:", bg="#f0f2f5", fg="#1877f2", font=label_font)
+        self.lbl_rol.place(x=x_label, y=y_start + 7 * y_step)
+        self.combo_rol = ttk.Combobox(self.ventana, font=entry_font, values=["estudiante", "recepcionista"])
+        self.combo_rol.place(x=x_entry, y=y_start + 7 * y_step, width=entry_width)
+        self.combo_rol.set("estudiante")  # Valor predeterminado
+        Tooltip(self.combo_rol, "Selecciona tu rol en la plataforma")
         # Botón ver contraseña (icono ojo)
         self.iconoVer = tk.PhotoImage(file=r"icons/eye.png")
         self.btnVer = tk.Button(self.ventana, image=self.iconoVer, bd=0, bg="#f0f2f5", activebackground="#f0f2f5", cursor="hand2")
@@ -236,29 +244,58 @@ class VentanaRegistro:
         self.ventana.destroy()
     
     def registrar_usuario(self):
+        from conexion import obtener_conexion
+
         nombre = self.entry_nombre.get()
         apellido = self.entry_apellido.get()
         cedula = self.entry_cedula.get()
-        telefono = self.entry_telefono.get()  # <-- Nuevo
+        telefono = self.entry_telefono.get()
         fecha_nacimiento = self.entry_fecha.get()
         contrasena = self.entry_password.get()
         correo = self.entry_correo.get()
+        rol = self.combo_rol.get()
 
         valido, nombre_min, apellido_min = validar_campos_registro(
             nombre, apellido, cedula, telefono, fecha_nacimiento, contrasena, correo
         )
-        if not nombre and not apellido and not cedula and not fecha_nacimiento and not contrasena and not correo:
-            messagebox.showerror("Error", "Por favor, completa todos los campos antes de registrarte.")
-            return False, None, None
-        if valido:
-            usuario = generar_usuario_unico(nombre_min, usuarios_existentes)
-            usuarios_existentes.append(usuario)  # Simula guardar el usuario
-            messagebox.showinfo(
-                "Registro exitoso",
-                f"¡Registro exitoso!\nTu usuario es: {usuario} \n Recuerda tu usuario y contraseña para iniciar sesión más tarde."
-            )
-            # Aquí puedes limpiar los campos o cerrar la ventana si lo deseas
 
+        if not valido:
+            return
+
+        usuario = generar_usuario_unico(nombre_min, usuarios_existentes)
+        usuarios_existentes.append(usuario)
+
+        try:
+            conn = obtener_conexion()
+            cursor = conn.cursor()
+
+            if rol == "estudiante":
+                cursor.execute("""
+                    INSERT INTO estudiante (cedula, nombre, apellido, telefono, fecha_nacimiento, email)
+                    VALUES (%s, %s, %s, %s, %s, %s)
+                """, (cedula, nombre, apellido, telefono, fecha_nacimiento, correo))
+            elif rol == "recepcionista":
+                cursor.execute("""
+                    INSERT INTO recepcionista (cedula, nombre, apellido, telefono, email)
+                    VALUES (%s, %s, %s, %s, %s)
+                """, (cedula, nombre, apellido, telefono, correo))
+            else:
+                messagebox.showerror("Error", "Rol no válido.")
+                return
+
+            # Registrar en la tabla de usuario
+            cursor.execute("""
+                INSERT INTO usuario (cedula, username, password, rol)
+                VALUES (%s, %s, %s, %s)
+            """, (cedula, usuario, contrasena, rol))
+
+            conn.commit()
+            messagebox.showinfo("Registro exitoso", f"¡Registro completado!\nTu usuario es: {usuario}")
+            self.ventana.destroy()
+            self.ventana_principal.deiconify()
+
+        except Exception as e:
+            messagebox.showerror("Error", f"Ocurrió un error al registrar: {e}")
     def verCaracteres(self, event):
         # Si el evento es <Enter>, muestra la contraseña
         if event.type == tk.EventType.Enter:
