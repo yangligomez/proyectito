@@ -260,4 +260,3 @@ class Estudiante:
             self.ventana_principal.deiconify()
             self.ventana.destroy()
 
-

@@ -3,16 +3,18 @@ from Tooltip import Tooltip
 from utils import centrar_ventana
 
 class VentanaInicioSesion:
-    def __init__(self, ventana):
+    def __init__(self, ventana, ventana_principal):
         self.ventana = ventana
+        self.ventana_principal = ventana_principal
+
         self.ventana.title("Iniciar Sesión")
         self.ventana.geometry("900x600")
-        centrar_ventana(self.ventana, 900, 600)  # Centrar la ventana
+        centrar_ventana(self.ventana, 900, 600)
         self.ventana.config(bg="#f0f2f5")
         self.ventana.resizable(0, 0)
-        self.ventana.lift()           # Pone la ventana al frente
-        self.ventana.focus_force()    # Da el foco a la ventana
-        self.ventana.grab_set()       # Hace que todos los eventos vayan a esta ventana
+        self.ventana.lift()
+        self.ventana.focus_force()
+        self.ventana.grab_set()
 
         # Título principal
         self.label = tk.Label(
@@ -84,7 +86,7 @@ class VentanaInicioSesion:
         )
         self.btn_volver.place(x=20, y=30, anchor=tk.W, width=100, height=30)
         Tooltip(self.btn_volver, "Volver a la ventana principal")
-    
+
         # Botón Ayuda
         self.btn_ayuda = tk.Button(
             self.ventana,
@@ -100,9 +102,7 @@ class VentanaInicioSesion:
         )
         self.btn_ayuda.place(x=880, y=30, anchor=tk.E, width=100, height=30)
         Tooltip(self.btn_ayuda, "Abrir ventana de ayuda")
-        
-        
-        
+
     def regresar_a_principal(self):
         self.ventana_principal.deiconify()
         self.ventana.destroy()
@@ -127,7 +127,7 @@ class VentanaInicioSesion:
             if resultado:
                 rol = resultado[0]
                 messagebox.showinfo("Éxito", f"Sesión iniciada como {rol}")
-                self.ventana.withdraw()  # Oculta la ventana de inicio de sesión
+                self.ventana.destroy()  # Cierra solo la ventana de inicio de sesión
 
                 # Abre la ventana correspondiente al rol
                 if rol == "estudiante":
