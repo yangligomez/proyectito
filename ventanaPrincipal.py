@@ -186,21 +186,18 @@ class VentanaPrincipal:
         self.ventana.withdraw()
         if rol == "Estudiante":
             def abrir_panel_estudiante():
-                # Aquí puedes abrir el panel principal del estudiante o mostrar un mensaje
                 messagebox.showinfo("Estudiante", "¡Bienvenido, estudiante!")
                 self.ventana.deiconify()
             VentanaVerificacionEstud(self.ventana, abrir_panel_estudiante)
         elif rol == "Recepcionista":
-            def abrir_panel_recep():
-                messagebox.showinfo("Recepcionista", "¡Bienvenido, recepcionista!")
-                self.ventana.deiconify()
-            VentanaVerificacionRecep(self.ventana, abrir_panel_recep)
+            VentanaVerificacionRecep(self.ventana)
         elif rol == "Administrador":
             def abrir_panel_admin():
                 VentanaAdmin(self.ventana)
             VentanaVerificacionAdmin(self.ventana, abrir_panel_admin)
         else:
             messagebox.showerror("Error", "Rol no reconocido.")
+
 
     def mostrar_ayuda(self):
         messagebox.showinfo(
