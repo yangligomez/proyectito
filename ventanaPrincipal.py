@@ -1,6 +1,5 @@
 import tkinter as tk 
 from Tooltip import Tooltip
-from PIL import Image, ImageTk
 from ventanaRegistro import VentanaRegistro
 from ventanaInicioSesion import VentanaInicioSesion
 from ventanaVerificacionAdmin import VentanaVerificacionAdmin

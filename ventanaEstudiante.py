@@ -1,8 +1,9 @@
 from email.mime import image
 import tkinter as tk
+from tkinter import *
 from tkinter import ttk
 from tkinter import messagebox
-from PIL import Image, ImageTk
+import os
 
 
 class Estudiante:
@@ -111,16 +112,16 @@ class Estudiante:
         tarjeta.place(x=x, y=y, width=230, height=300)
 
         # Cargar imagen
+        ruta_absoluta = os.path.join(os.path.dirname(__file__), ruta_imagen)
+        print("Probando imagen:", ruta_absoluta)
+        print("¿Existe?", os.path.exists(ruta_absoluta))
         try:
-            imagen = Image.open(ruta_imagen)
-            imagen = imagen.resize((230, 300))
-            imagen_tk = ImageTk.PhotoImage(imagen)
-            self.imagenes[nombre] = imagen_tk
-
-            fondo = tk.Label(tarjeta, image=self.imagenes[nombre], bg="white")
+            imagen_tk = tk.PhotoImage(file=ruta_absoluta)
+            fondo = tk.Label(tarjeta, image=imagen_tk, bg="white")
+            fondo.image = imagen_tk  # ESTA LÍNEA es CLAVE
             fondo.place(x=0, y=0, relwidth=1, relheight=1)
         except Exception as e:
-            # Si no se puede cargar la imagen, usar un fondo de color
+            print("Error al cargar imagen:", e)
             fondo = tk.Label(tarjeta, text="Imagen no disponible", bg="#f0f2f5", fg="gray")
             fondo.place(x=0, y=0, relwidth=1, relheight=1)
 
@@ -155,11 +156,11 @@ class Estudiante:
     def mostrar_cursos_disponibles(self):
         self.crear_contenedor()
 
-        self.crear_tarjeta_curso("Curso de Barismo", 50, 50, "imagenes\\barista.png",
+        self.crear_tarjeta_curso("Curso de Barismo", 50, 50, "imagenes/barismo.png",
                                 "Aprende a preparar café de calidad y técnicas de barismo.")
-        self.crear_tarjeta_curso("Curso de Técnico en Celulares", 300, 50, "imagenes\\reparacion.png",
+        self.crear_tarjeta_curso("Curso de Técnico en Celulares", 300, 50, "imagenes/tecnico.png",
                                 "Aprende a reparar dispositivos móviles y técnicas de diagnóstico.")
-        self.crear_tarjeta_curso("Curso de Atletismo", 550, 50, "imagenes\\Sin título (2).png",
+        self.crear_tarjeta_curso("Curso de Atletismo", 550, 50, "imagenes/yangli.png",
                                 "Mejora tu rendimiento deportivo con este curso de atletismo.")
 
     def mostrar_mis_cursos(self):
@@ -174,15 +175,15 @@ class Estudiante:
         # Información de los cursos
         info_cursos = {
             "Curso de Barismo": {
-                "imagen": "imagenes\\barista.png",
+                "imagen": "imagenes/barismo.png",
                 "descripcion": "Aprende a preparar café de calidad y técnicas de barismo."
             },
             "Curso de Técnico en Celulares": {
-                "imagen": "imagenes\\reparacion.png",
+                "imagen": "imagenes/reparacion.png",
                 "descripcion": "Aprende a reparar dispositivos móviles y técnicas de diagnóstico."
             },
             "Curso de Atletismo": {
-                "imagen": "imagenes\\Sin título (2).png",
+                "imagen": "imagenes/atletismo.png",
                 "descripcion": "Mejora tu rendimiento deportivo con este curso de atletismo."
             }
         }
@@ -245,5 +246,3 @@ class Estudiante:
             messagebox.showwarning("Ya inscrito", f"Ya estás inscrito en {nombre_curso}")
 
 
-if __name__ == "__main__":
-    estudiante1 = Estudiante("12345678", "Juan", "Pérez", "321654987", "juanp@gmail.com")
