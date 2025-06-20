@@ -7,7 +7,9 @@ import os
 
 
 class Estudiante:
-    def __init__(self, cedula, nombre, apellido, telefono, email):
+    def __init__(self, ventana_principal, cedula, nombre, apellido, telefono, email):
+        self.ventana_principal = ventana_principal
+        self.ventana = tk.Toplevel(self.ventana_principal)
         self.cedula = cedula
         self.nombre = nombre
         self.apellido = apellido
@@ -18,6 +20,7 @@ class Estudiante:
         self.cursos_registrados = []  # Lista para almacenar los cursos registrados
 
         # Definir cursos disponibles ANTES de crear la ventana
+        
         self.cursos_disponibles = [
             "Curso de Barismo",
             "Curso de Técnico en Celulares", 
@@ -25,7 +28,7 @@ class Estudiante:
         ]
 
         # Ventana principal
-        self.ventana = tk.Tk()
+        self.ventana = tk.Toplevel(self.ventana_principal)
         self.ventana.title(f"Bienvenido {self.nombre}")
         self.ventana.geometry("900x600")
         self.ventana.configure(bg="#f0f2f5")  # Color de fondo
@@ -66,13 +69,16 @@ class Estudiante:
         self.activar_boton(self.btn_cursos)
 
         # Botón VOLVER (azul)
-        self.btn_volver = tk.Button(self.ventana, text="VOLVER",
-                                   bg="#1877f2", fg="white",
-                                   font=("Segoe UI", 12, "bold"),
-                                   bd=0, cursor="hand2", relief="flat",
-                                   activebackground="#166fe5",
-                                   activeforeground="white",
-                                   command=self.ventana.destroy)
+        self.btn_volver = tk.Button(
+                self.ventana, text="VOLVER",
+                bg="#1877f2", fg="white",
+                font=("Segoe UI", 12, "bold"),
+                bd=0, cursor="hand2", relief="flat",
+                activebackground="#166fe5",
+                activeforeground="white",
+                command=self.regresar  # <-- Aquí llamas al método regresar
+)
+
         self.btn_volver.place(x=20, y=30, width=100, height=30)
 
         # Botón AYUDA 
@@ -244,5 +250,15 @@ class Estudiante:
             self.abrir_mis_cursos()
         else:
             messagebox.showwarning("Ya inscrito", f"Ya estás inscrito en {nombre_curso}")
+            
+    def regresar(self):
+        respuesta = messagebox.askquestion(
+            "Regresar",
+            "¿Estás seguro de que quieres regresar? Se perderán los cambios no guardados.",
+            icon="warning"
+        )
+        if respuesta == "yes":
+            self.ventana_principal.deiconify()
+            self.ventana.destroy()
 
 
