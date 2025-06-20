@@ -18,9 +18,9 @@ def generar_usuario_unico(nombre, usuarios_existentes):
         if usuario not in usuarios_existentes:
             return usuario
 
-def validar_campos_registro(nombre, apellido, cedula, telefono, fecha_nacimiento, contrasena, correo):
+def validar_campos_registro(nombre, apellido, cedula, telefono, contrasena, correo):
     # Verifica si todos los campos están vacíos
-    if not nombre and not apellido and not cedula and not fecha_nacimiento and not contrasena and not correo:
+    if not nombre and not apellido and not cedula and not contrasena and not correo:
         messagebox.showerror("Error", "Por favor, completa todos los campos antes de registrarte.")
         return False, None, None
 
@@ -47,10 +47,7 @@ def validar_campos_registro(nombre, apellido, cedula, telefono, fecha_nacimiento
         messagebox.showerror("Error", "El teléfono es obligatorio, debe contener solo números y tener exactamente 10 dígitos.")
         return False, None, None
 
-    # Fecha de nacimiento: formato obligatorio (por ejemplo, DD/MM/AAAA)
-    if not fecha_nacimiento or not re.match(r"^\d{2}/\d{2}/\d{4}$", fecha_nacimiento):
-        messagebox.showerror("Error", "La fecha de nacimiento es obligatoria y debe tener el formato DD/MM/AAAA.")
-        return False, None, None
+
 
     # Correo electrónico: formato válido
     if not correo or not re.match(r"^[\w\.-]+@[\w\.-]+\.\w+$", correo):
@@ -130,11 +127,6 @@ class VentanaRegistro:
         self.entry_telefono = tk.Entry(self.ventana, font=entry_font)
         self.entry_telefono.place(x=x_entry, y=y_start + 3 * y_step, width=entry_width)
 
-        # Fecha de nacimiento (con calendario)
-        self.lbl_fecha = tk.Label(self.ventana, text="Fecha de nacimiento:", bg="#f0f2f5", fg="#1877f2", font=label_font)
-        self.lbl_fecha.place(x=x_label, y=y_start + 4 * y_step)
-        self.entry_fecha = DateEntry(self.ventana, font=entry_font, width=22, bd=2, relief="groove", date_pattern="dd/MM/yyyy")
-        self.entry_fecha.place(x=x_entry, y=y_start + 4 * y_step, width=entry_width)
 
         # Correo
         self.lbl_correo = tk.Label(self.ventana, text="Correo:", bg="#f0f2f5", fg="#1877f2", font=label_font)
@@ -162,7 +154,6 @@ class VentanaRegistro:
         Tooltip(self.entry_apellido, "Ingresa tu apellido\n Debe tener al menos 3 letras\n y solo contener letras")
         Tooltip(self.entry_cedula, "Ingresa tu cédula\nSolo debe contener números, sin espacios, comas o puntos")
         Tooltip(self.entry_telefono, "Ingresa tu número de teléfono\nDebe tener exactamente 10 dígitos\nSolo debe contener números enteros")
-        Tooltip(self.entry_fecha, "Selecciona tu fecha de nacimiento")
         Tooltip(self.entry_correo, "Ingresa tu correo electrónico activo\n Ejemplo:usuarionuevo@gmail.com")
         Tooltip(self.entry_password, "Crea una contraseña segura\n Debe tener al menos 5 caracteres,\nuna mayúscula, una minúscula y un número")
         
@@ -216,6 +207,7 @@ class VentanaRegistro:
             relief="flat",
             command=self.registrar_usuario  # <--- ESTA LÍNEA ES LA CLAVE
         )
+
         self.btn_registrar.place(relx=0.5, y=560, anchor=tk.CENTER, width=220, height=50)
         Tooltip(self.btn_registrar, "Registrar usuario con los datos ingresados")
         
@@ -244,13 +236,12 @@ class VentanaRegistro:
         apellido = self.entry_apellido.get()
         cedula = self.entry_cedula.get()
         telefono = self.entry_telefono.get()
-        fecha_nacimiento = self.entry_fecha.get()
         contrasena = self.entry_password.get()
         correo = self.entry_correo.get()
-        rol = self.combo_rol.get()
+
 
         valido, nombre_min, apellido_min = validar_campos_registro(
-            nombre, apellido, cedula, telefono, fecha_nacimiento, contrasena, correo
+            nombre, apellido, cedula, telefono, contrasena, correo
         )
 
         if not valido:
@@ -263,25 +254,16 @@ class VentanaRegistro:
             conn = obtener_conexion()
             cursor = conn.cursor()
 
-            if rol == "estudiante":
-                cursor.execute("""
-                    INSERT INTO estudiante (cedula, nombre, apellido, telefono, fecha_nacimiento, email)
-                    VALUES (%s, %s, %s, %s, %s, %s)
-                """, (cedula, nombre, apellido, telefono, fecha_nacimiento, correo))
-            elif rol == "recepcionista":
-                cursor.execute("""
-                    INSERT INTO recepcionista (cedula, nombre, apellido, telefono, email)
-                    VALUES (%s, %s, %s, %s, %s)
-                """, (cedula, nombre, apellido, telefono, correo))
-            else:
-                messagebox.showerror("Error", "Rol no válido.")
-                return
-
             # Registrar en la tabla de usuario
+            cursor.execute("""
+                INSERT INTO estudiante (cedula, nombre, apellido, telefono, email)
+                VALUES (%s, %s, %s, %s, %s)
+            """, (cedula, nombre, apellido, telefono, correo))
+
             cursor.execute("""
                 INSERT INTO usuario (cedula, username, password, rol)
                 VALUES (%s, %s, %s, %s)
-            """, (cedula, usuario, contrasena, rol))
+            """, (cedula, usuario, contrasena, "estudiante"))
 
             conn.commit()
             messagebox.showinfo("Registro exitoso", f"¡Registro completado!\nTu usuario es: {usuario}")

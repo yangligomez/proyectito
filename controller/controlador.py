@@ -24,7 +24,7 @@ def verificar_credenciales_recepcionista(usuario, password):
         return recepcionista
     return None
 
-from proyectito.modelo.administrador import Administrador
+from modelo.administrador import Administrador
 
 def agregar_recepcionista(datos):
     Administrador.agregar_recepcionista(datos)

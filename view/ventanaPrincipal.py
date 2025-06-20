@@ -158,34 +158,18 @@ class VentanaPrincipal:
         self.rol_actual = rol
 
     def abrir_inicio_sesion(self):
-        rol = getattr(self, "rol_actual", None)
-        if not rol:
-            messagebox.showwarning("Selecciona un rol", "Por favor selecciona un rol para iniciar sesión.")
-            return
-        self.ventana.withdraw()
-        if rol == "Estudiante":
-            def abrir_panel_estudiante():
-                messagebox.showinfo("Estudiante", "¡Bienvenido, estudiante!")
-                self.ventana.deiconify()
-            VentanaVerificacionEstud(self.ventana, abrir_panel_estudiante)
-        elif rol == "Recepcionista":
-            VentanaVerificacionRecep(self.ventana)
-        elif rol == "Administrador":
-            def abrir_panel_admin():
-                VentanaAdmin(self.ventana)
-            VentanaVerificacionAdmin(self.ventana, abrir_panel_admin)
-        else:
-            messagebox.showerror("Error", "Rol no reconocido.")
-
+        self.ventana.withdraw()  # Oculta la ventana principal
+        ventana_login = tk.Toplevel(self.ventana)
+        VentanaInicioSesion(ventana_login, self.ventana)
 
     def mostrar_ayuda(self):
         messagebox.showinfo(
-        "Ayuda",
-        "Solo Estudiantes pueden registrarse desde el botón (Registrarse).\n"
-        "Si eres Estudiante registrado puedes iniciar sesión desde el botón (Iniciar Sesión).\n"
-        "Si eres Administrador o Recepcionista, debes iniciar sesión para acceder a tu inscripción y/o consultas."
-        "Para más información, contacta al servidor."
-    )
+            "Ayuda",
+            "Solo Estudiantes pueden registrarse desde el botón (Registrarse).\n"
+            "Si eres Estudiante registrado puedes iniciar sesión desde el botón (Iniciar Sesión).\n"
+            "Si eres Administrador o Recepcionista, debes iniciar sesión para acceder a tu inscripción y/o consultas."
+            "Para más información, contacta al servidor."
+        )
 
 
 

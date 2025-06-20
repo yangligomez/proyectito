@@ -6,5 +6,4 @@ class Main:
         self.app = VentanaPrincipal(self.root, usar_root=True)
         self.root.mainloop()
 
-
 Main()

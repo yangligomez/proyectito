@@ -3,9 +3,8 @@ from Tooltip import Tooltip
 from utils import centrar_ventana
 
 class VentanaInicioSesion:
-    def __init__(self, ventana_principal):
-        self.ventana_principal = ventana_principal
-        self.ventana = tk.Toplevel()
+    def __init__(self, ventana):
+        self.ventana = ventana
         self.ventana.title("Iniciar Sesión")
         self.ventana.geometry("900x600")
         centrar_ventana(self.ventana, 900, 600)  # Centrar la ventana
@@ -111,6 +110,10 @@ class VentanaInicioSesion:
     def verificar_credenciales(self):
         from conexion import obtener_conexion
         from tkinter import messagebox
+        from view.ventanaRecepcionista import VentanaRecepcionista
+        from view.ventanaVerificacionAdmin import VentanaVerificacionAdmin
+        from view.ventanaVerificacionEstud import VentanaVerificacionEstud
+
         usuario = self.entry_usuario.get()
         clave = self.entry_password.get()
 
@@ -124,7 +127,17 @@ class VentanaInicioSesion:
             if resultado:
                 rol = resultado[0]
                 messagebox.showinfo("Éxito", f"Sesión iniciada como {rol}")
+                self.ventana.withdraw()  # Oculta la ventana de inicio de sesión
 
+                # Abre la ventana correspondiente al rol
+                if rol == "estudiante":
+                    VentanaVerificacionEstud(self.ventana_principal, lambda: None)
+                elif rol == "recepcionista":
+                    VentanaRecepcionista(self.ventana_principal, usuario)
+                elif rol == "administrador":
+                    VentanaVerificacionAdmin(self.ventana_principal, lambda: None)
+                else:
+                    messagebox.showerror("Error", "Rol no reconocido.")
             else:
                 messagebox.showerror("Error", "Credenciales inválidas.")
         except Exception as e:
