@@ -2,9 +2,10 @@ import tkinter as tk
 from tkinter import messagebox
 from utils import centrar_ventana
 from Tooltip import Tooltip
+from ventanaRecepcionista import VentanaRecepcionista
 
 class VentanaVerificacionRecep:
-    def __init__(self, ventana_principal, callback_exito):
+    def __init__(self, ventana_principal):
         self.ventana_principal = ventana_principal
         self.ventana = tk.Toplevel(ventana_principal)
         self.ventana.title("Iniciar sesión Recepcionista")
@@ -16,18 +17,10 @@ class VentanaVerificacionRecep:
         self.ventana.focus_force()
         self.ventana.grab_set()
 
-        self.callback_exito = callback_exito
-
         # Botón Regresar
         self.boton_regresar = tk.Button(
-            self.ventana,
-            text="Regresar",
-            bg="#1877f2",
-            fg="white",
-            font=("Segoe UI", 12, "bold"),
-            bd=0,
-            cursor="hand2",
-            relief="flat",
+            self.ventana, text="Regresar", bg="#1877f2", fg="white",
+            font=("Segoe UI", 12, "bold"), bd=0, cursor="hand2", relief="flat",
             command=self.regresar
         )
         self.boton_regresar.place(x=20, y=20, width=80, height=30)
@@ -35,14 +28,8 @@ class VentanaVerificacionRecep:
 
         # Botón Ayuda
         self.boton_ayuda = tk.Button(
-            self.ventana,
-            text="Ayuda",
-            bg="#f22618",
-            fg="white",
-            font=("Segoe UI", 12, "bold"),
-            bd=0,
-            cursor="hand2",
-            relief="flat",
+            self.ventana, text="Ayuda", bg="#f22618", fg="white",
+            font=("Segoe UI", 12, "bold"), bd=0, cursor="hand2", relief="flat",
             command=self.mostrar_ayuda
         )
         self.boton_ayuda.place(x=20, y=60, width=80, height=30)
@@ -50,26 +37,17 @@ class VentanaVerificacionRecep:
 
         # Botón Cerrar
         self.boton_cerrar = tk.Button(
-            self.ventana,
-            text="Cerrar",
-            bg="#f22618",
-            fg="white",
-            font=("Segoe UI", 12, "bold"),
-            bd=0,
-            cursor="hand2",
-            relief="flat",
+            self.ventana, text="Cerrar", bg="#f22618", fg="white",
+            font=("Segoe UI", 12, "bold"), bd=0, cursor="hand2", relief="flat",
             command=self.ventana.destroy
         )
         self.boton_cerrar.place(x=800, y=20, width=80, height=30)
         Tooltip(self.boton_cerrar, "Cerrar esta ventana")
 
-        # Título principal
+        # Título
         tk.Label(
-            self.ventana,
-            text="Iniciar sesión Recepcionista",
-            bg="#f0f2f5",
-            fg="#1877f2",
-            font=("Segoe UI", 28, "bold")
+            self.ventana, text="Iniciar sesión Recepcionista",
+            bg="#f0f2f5", fg="#1877f2", font=("Segoe UI", 28, "bold")
         ).place(relx=0.5, y=100, anchor="center")
 
         label_font = ("Segoe UI", 14)
@@ -94,17 +72,11 @@ class VentanaVerificacionRecep:
         self.entry_password.place(x=x_entry, y=y_password, width=entry_width)
         Tooltip(self.entry_password, "Ingresa tu contraseña de recepcionista")
 
-        # Botón ver contraseña (icono ojo)
+        # Botón ver contraseña
         self.iconoVer = tk.PhotoImage(file=r"icons/eye.png")
         self.btnVer = tk.Button(
-            self.ventana,
-            image=self.iconoVer,
-            bd=0,
-            bg="#f0f2f5",
-            activebackground="#f0f2f5",
-            cursor="hand2",
-            takefocus=0,
-            relief="flat"
+            self.ventana, image=self.iconoVer, bd=0, bg="#f0f2f5",
+            activebackground="#f0f2f5", cursor="hand2", takefocus=0, relief="flat"
         )
         self.btnVer.place(width=30, height=30, x=x_entry + entry_width - 30, y=y_password)
         self.btnVer.bind("<Enter>", self.mostrar_password)
@@ -116,16 +88,9 @@ class VentanaVerificacionRecep:
 
         # Botón ingresar
         self.btn_ingresar = tk.Button(
-            self.ventana,
-            text="Ingresar",
-            bg="#1877f2",
-            fg="white",
-            font=("Segoe UI", 18, "bold"),
-            bd=0,
-            activebackground="#166fe5",
-            activeforeground="white",
-            cursor="hand2",
-            relief="flat",
+            self.ventana, text="Ingresar", bg="#1877f2", fg="white",
+            font=("Segoe UI", 18, "bold"), bd=0, activebackground="#166fe5",
+            activeforeground="white", cursor="hand2", relief="flat",
             command=self.verificar
         )
         self.btn_ingresar.place(relx=0.5, y=400, anchor="center", width=220, height=50)
@@ -148,10 +113,10 @@ class VentanaVerificacionRecep:
     def verificar(self):
         usuario = self.entry_usuario.get()
         password = self.entry_password.get()
-        # Aquí puedes poner la lógica real de verificación
         if usuario == "Recep" and password == "Recep123":
             self.ventana.destroy()
-            self.callback_exito()
+            self.ventana_principal.withdraw()
+            VentanaRecepcionista(self.ventana_principal, usuario)
         else:
             messagebox.showerror("Error", "Credenciales incorrectas")
 
