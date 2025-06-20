@@ -102,7 +102,7 @@ class VentanaRecepcionista:
         Tooltip(self.btn_gestionar_estudiantes, "Ver, buscar, agregar, editar o eliminar estudiantes")
 
         # Gestión de inscripciones (Interfaz sin funcionalidad)
-        x_der = 550
+        x_der = 540
 
         self.lbl_gestion_inscripciones = tk.Label(
             self.ventana,
